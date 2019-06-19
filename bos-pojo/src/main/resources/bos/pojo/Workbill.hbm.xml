@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="bos.pojo.Workbill" table="qp_workbill" schema="bos-pom">
+        <id name="id">
+            <column name="id" sql-type="varchar(32)" length="32"/>
+            <generator class="uuid"></generator>
+        </id>
+       <many-to-one name="noticebill" lazy="false" class="bos.pojo.Noticebill" fetch="select">
+           <column name="noticebill_id" length="32" />
+       </many-to-one>
+        <property name="type">
+            <column name="type" sql-type="varchar(20)" length="20" not-null="true"/>
+        </property>
+        <property name="pickstate">
+            <column name="pickstate" sql-type="varchar(20)" length="20" not-null="true"/>
+        </property>
+        <property name="buildtime">
+            <column name="buildtime" sql-type="timestamp"/>
+        </property>
+        <property name="attachbilltimes">
+            <column name="attachbilltimes" sql-type="int(11)" not-null="true"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <many-to-one name="staff" lazy="false" class="bos.pojo.Staff" fetch="select">
+            <column name="staff_id" length="32" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

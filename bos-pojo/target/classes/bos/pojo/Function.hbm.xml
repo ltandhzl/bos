@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="bos.pojo.Function" table="auth_function" schema="bos-pom">
+        <id name="id">
+            <column name="id" sql-type="varchar(32)" length="32"/>
+            <generator class="uuid"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="varchar(255)" />
+        </property>
+        <property name="code">
+            <column name="code" sql-type="varchar(255)" />
+        </property>
+        <property name="description">
+            <column name="description" sql-type="varchar(255)"/>
+        </property>
+        <property name="page">
+            <column name="page" sql-type="varchar(255)"/>
+        </property>
+        <property name="generatemenu">
+            <column name="generatemenu" sql-type="varchar(255)" />
+        </property>
+        <property name="zindex">
+            <column name="zindex" sql-type="int(11)"/>
+        </property>
+        <many-to-one name="parentFunction" lazy="false" class="bos.pojo.Function" fetch="select">
+             <column name="pid" length="32"/>
+        </many-to-one>
+<!--        inverse=true，代表权限一方不能维护角色，由角色维护-->
+        <set name="roles" lazy="false" inverse="true" table="role_function" >
+            <key>
+                <column name="function_id" length="32"  />
+            </key>
+            <many-to-many entity-name="bos.pojo.Role">
+                <column name="role_id" length="32" />
+            </many-to-many>
+        </set>
+        <!--        inverse=true，代表权限一方不能维护子权限，由子权限维护-->
+        <set name="children" lazy="false" inverse="true">
+            <key>
+                <column name="pid" length="32" />
+            </key>
+            <one-to-many class="bos.pojo.Function" />
+        </set>
+    </class>
+</hibernate-mapping>

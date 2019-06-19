@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <!-- 配置常量 -->
+    <!-- 字符集 -->
+    <constant name="struts.i18n.encoding" value="UTF-8"></constant>
+    <!-- 开发模式 -->
+    <constant name="struts.devMode" value="true"></constant>
+    <!-- 主题 -->
+    <constant name="struts.ui.theme" value="simple"></constant>
+    <!-- 扩展名 -->
+    <package name="bos" namespace="/" extends="struts-default">
+        <interceptors>
+            <interceptor name="bosLoginInterceptor" class="bos.interceptor.LoginInterceptor">
+                <param name="excludeMethods">login</param>
+            </interceptor>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="bosLoginInterceptor"></interceptor-ref>
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"></default-interceptor-ref>
+        <global-results>
+            <result name="login">/login.jsp</result>
+            <result name="unauthorized">/unauthorized.jsp</result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping result="unauthorized"
+                               exception="org.apache.shiro.authz.UnauthorizedException"></exception-mapping>
+        </global-exception-mappings>
+        <!-- 需要进行权限控制的页面访问 -->
+        <action name="page_*_*">
+            <result type="dispatcher">/pages/{1}/{2}.jsp</result>
+        </action>
+        <action name="userAction_*" class="userAction" method="{1}">
+            <result name="login">/login.jsp</result>
+            <result name="home" type="redirect">/pages/common/index.jsp</result>
+            <result name="logout" type="redirect">/login.jsp</result>
+            <result name="list" type="redirect">/pages/admin/userlist.jsp</result>
+        </action>
+        <action name="staffAction_*" class="staffAction" method="{1}">
+            <result name="list" type="redirect">/pages/base/staff.jsp</result>
+        </action>
+        <action name="regionAction_*" class="regionAction" method="{1}">
+            <result name="list" type="redirect">/pages/base/region.jsp</result>
+        </action>
+        <action name="subareaAction_*" class="subareaAction" method="{1}">
+            <result name="list" type="redirect">/pages/base/subarea.jsp</result>
+        </action>
+        <action name="decidedZoneAction_*" class="decidedZoneAction" method="{1}">
+            <result name="list" type="redirect">/pages/base/decidedzone.jsp</result>
+        </action>
+        <action name="noticeBillAction_*" class="noticeBillAction" method="{1}">
+            <result name="list" type="redirect">/pages/qupai/noticebill.jsp</result>
+        </action>
+        <action name="workOrderManageAction_*" class="workOrderManageAction" method="{1}">
+            <result name="list" type="redirect">/pages/qupai/quickworkorder.jsp</result>
+        </action>
+        <action name="functionAction_*" class="functionAction" method="{1}">
+            <result name="list" type="redirect">/pages/admin/function.jsp</result>
+        </action>
+        <action name="roleAction_*" class="roleAction" method="{1}">
+            <result name="list" type="redirect">/pages/admin/role.jsp</result>
+        </action>
+        <action name="workBillAction_*" class="workBillAction" method="{1}">
+        </action>
+    </package>
+</struts>
